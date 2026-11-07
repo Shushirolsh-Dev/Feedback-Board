@@ -1,9 +1,8 @@
 FROM php:8.3-cli-alpine
-RUN docker-php-ext-install pdo_sqlite
+RUN apk add --no-cache su-exec && docker-php-ext-install pdo_sqlite
 WORKDIR /app
 COPY . .
-RUN mkdir -p /app/storage && chown -R www-data:www-data /app/storage
-ENV FEEDBACK_DB_PATH=/app/storage/feedback.sqlite
+RUN mkdir -p /app/storage /var/data && chown -R www-data:www-data /app/storage /var/data && chmod +x /app/docker-entrypoint.sh
+ENV FEEDBACK_DB_PATH=/var/data/feedback.sqlite
 EXPOSE 8080
-USER www-data
-CMD ["php","-S","0.0.0.0:8080","-t","public","public/router.php"]
+ENTRYPOINT ["/app/docker-entrypoint.sh"]
