@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: feedback-board
+    runtime: docker
+    plan: starter
+    healthCheckPath: /
+    envVars:
+      - key: FEEDBACK_ADMIN_PASSWORD
+        sync: false
+      - key: FEEDBACK_APP_NAME
+        value: Feedback Board
+      - key: FEEDBACK_DB_PATH
+        value: /var/data/feedback.sqlite
+    disk:
+      name: feedback-data
+      mountPath: /var/data
+      sizeGB: 1
